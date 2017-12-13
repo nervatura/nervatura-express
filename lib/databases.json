@@ -1,0 +1,380 @@
+{
+  "default": {
+    "demo": {
+      "engine": "sqlite", 
+      "connect": {
+        "host": "", 
+        "port": "", 
+        "dbname": "demo", 
+        "username": "", 
+        "password": ""},
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "mydemo": {
+      "engine": "mysql", 
+      "connect": {
+        "host": "localhost", 
+        "port": "3306", 
+        "dbname": "nervatura", 
+        "username": "root", 
+        "password": "admin" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "pgdemo": {
+      "engine": "postgres", 
+      "connect": {
+        "host": "localhost", 
+        "port": "5432", 
+        "dbname": "nervatura", 
+        "username": "postgres", 
+        "password": "admin" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "msdemo": {
+      "engine": "mssql", 
+      "connect": {
+        "host": "localhost", 
+        "port": "1433", 
+        "dbname": "nervatura", 
+        "username": "sa", 
+        "password": "admin" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    }
+  },
+  "azure": {
+    "demo": {
+      "engine": "sqlite", 
+      "connect": {
+        "host": "", 
+        "port": "", 
+        "dbname": "demo", 
+        "username": "", 
+        "password": ""},
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "lcdemo": {
+      "engine": "mysql", 
+      "connect": {
+        "host": "$MYSQLCONNSTR_localdb", 
+        "port": "", 
+        "dbname": "localdb", 
+        "username": "", 
+        "password": "" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "mydemo": {
+      "engine": "mysql", 
+      "connect": {
+        "host": "$AZURE_MYSQL_HOST", 
+        "port": "3306", 
+        "dbname": "nervatura", 
+        "username": "$AZURE_MYSQL_USERNAME", 
+        "password": "$AZURE_MYSQL_PASSWORD" },
+      "settings":{
+        "db_ssl": true,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "pgdemo": {
+      "engine": "postgres", 
+      "connect": {
+        "host": "$AZURE_PG_HOST", 
+        "port": "5432", 
+        "dbname": "nervatura", 
+        "username": "$AZURE_PG_USERNAME", 
+        "password": "$AZURE_PG_PASSWORD" },
+      "settings":{
+        "db_ssl": true,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "msdemo": {
+      "engine": "mssql", 
+      "connect": {
+        "host": "$AZURE_SQL_HOST", 
+        "port": "1433", 
+        "dbname": "nervatura", 
+        "username": "$AZURE_SQL_USERNAME", 
+        "password": "$AZURE_SQL_PASSWORD" },
+      "settings":{
+        "db_ssl": true,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    }
+  },
+  "aws": {
+    "demo": {
+      "engine": "sqlite", 
+      "connect": {
+        "host": "", 
+        "port": "", 
+        "dbname": "demo", 
+        "username": "", 
+        "password": ""},
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "mydemo": {
+      "engine": "mysql", 
+      "connect": {
+        "host": "$RDS_HOSTNAME", 
+        "port": "$RDS_PORT", 
+        "dbname": "$RDS_DB_NAME", 
+        "username": "$RDS_USERNAME", 
+        "password": "$RDS_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "pgdemo": {
+      "engine": "postgres", 
+      "connect": {
+        "host": "$RDS_HOSTNAME", 
+        "port": "$RDS_PORT", 
+        "dbname": "$RDS_DB_NAME", 
+        "username": "$RDS_USERNAME", 
+        "password": "$RDS_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "msdemo": {
+      "engine": "mssql", 
+      "connect": {
+        "host": "$RDS_HOSTNAME", 
+        "port": "$RDS_PORT", 
+        "dbname": "$RDS_DB_NAME", 
+        "username": "$RDS_USERNAME", 
+        "password": "$RDS_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    }
+  },
+  "docker": {
+    "demo": {
+      "engine": "sqlite", 
+      "connect": {
+        "host": "", 
+        "port": "", 
+        "dbname": "demo", 
+        "username": "", 
+        "password": ""},
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "mydemo": {
+      "engine": "mysql", 
+      "connect": {
+        "host": "$MYSQL_PORT_3306_TCP_ADDR", 
+        "port": "$MYSQL_PORT_3306_TCP_PORT", 
+        "dbname": "$MYSQL_ENV_MYSQL_DATABASE", 
+        "username": "$MYSQL_ENV_MYSQL_USER", 
+        "password": "$MYSQL_ENV_MYSQL_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "pgdemo": {
+      "engine": "postgres", 
+      "connect": {
+        "host": "$POSTGRES_PORT_5432_TCP_ADDR", 
+        "port": "$POSTGRES_PORT_5432_TCP_PORT", 
+        "dbname": "$POSTGRES_ENV_POSTGRES_DB", 
+        "username": "$POSTGRES_ENV_POSTGRES_USER", 
+        "password": "$POSTGRES_ENV_POSTGRES_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "msdemo": {
+      "engine": "mssql", 
+      "connect": {
+        "host": "$MSSQL_PORT_1433_TCP_ADDR", 
+        "port": "$MSSQL_PORT_1433_TCP_PORT", 
+        "dbname": "nervatura", 
+        "username": "sa", 
+        "password": "$MSSQL_ENV_SA_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    }
+  },
+  "gae": {
+    "demo": {
+      "engine": "sqlite", 
+      "connect": {
+        "host": "", 
+        "port": "", 
+        "dbname": "demo", 
+        "username": "", 
+        "password": ""},
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "mydemo": {
+      "engine": "mysql", 
+      "connect": {
+        "host": "/cloudsql/$INSTANCE_CONNECTION_NAME", 
+        "port": "", 
+        "dbname": "$SQL_DATABASE", 
+        "username": "$SQL_USER", 
+        "password": "$SQL_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "pgdemo": {
+      "engine": "postgres", 
+      "connect": {
+        "host": "/cloudsql/$INSTANCE_CONNECTION_NAME", 
+        "port": "", 
+        "dbname": "$SQL_DATABASE", 
+        "username": "$SQL_USER", 
+        "password": "$SQL_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    }
+  },
+  "ibm": {
+    "demo": {
+      "engine": "sqlite", 
+      "connect": {
+        "host": "", 
+        "port": "", 
+        "dbname": "demo", 
+        "username": "", 
+        "password": ""},
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "mydemo": {
+      "engine": "mysql", 
+      "connect": {
+        "host": "$VCAP_SERVICES", 
+        "port": "", 
+        "dbname": "", 
+        "username": "", 
+        "password": "" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "pgdemo": {
+      "engine": "postgres", 
+      "connect": {
+        "host": "$VCAP_SERVICES", 
+        "port": "", 
+        "dbname": "", 
+        "username": "", 
+        "password": "" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    }
+  },
+  "openshift": {
+    "demo": {
+      "engine": "sqlite", 
+      "connect": {
+        "host": "", 
+        "port": "", 
+        "dbname": "demo", 
+        "username": "", 
+        "password": ""},
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "mydemo": {
+      "engine": "mysql", 
+      "connect": {
+        "host": "OPENSHIFT_MYSQL_DB_HOST", 
+        "port": "$OPENSHIFT_MYSQL_DB_PORT", 
+        "dbname": "$OPENSHIFT_APP_NAME", 
+        "username": "$OPENSHIFT_MYSQL_DB_USERNAME", 
+        "password": "$OPENSHIFT_MYSQL_DB_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    },
+    "pgdemo": {
+      "engine": "postgres", 
+      "connect": {
+        "host": "$OPENSHIFT_POSTGRESQL_DB_HOST", 
+        "port": "$OPENSHIFT_POSTGRESQL_DB_PORT", 
+        "dbname": "$OPENSHIFT_APP_NAME", 
+        "username": "$OPENSHIFT_POSTGRESQL_DB_USERNAME", 
+        "password": "$OPENSHIFT_POSTGRESQL_DB_PASSWORD" },
+      "settings":{
+        "db_ssl": false,
+        "ndi_enabled": true, 
+        "encrypt_password": "", 
+        "dbs_host_restriction": "" }
+    }
+  }
+}

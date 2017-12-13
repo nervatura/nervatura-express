@@ -1,0 +1,37 @@
+{
+  "APP_LANG": "en",
+  "START_PAGE": "ntura",
+  
+  "DATA_DIR": "data",
+  "PYTHON2_PATH": "python",
+  "DATA_STORE": "lokijs",
+
+  "LONG_TIMEOUT": 240000,  
+  "SESSION_SECRET": "auto",
+  "COOKIE_MAX_AGE": 604800000,
+  "CONTENT_LENGTH": 20000,
+
+  "ALL_HOST_RESTRICTION": "",
+  "NAS_HOST_RESTRICTION": "",
+  "NPI_HOST_RESTRICTION": "",
+  "NDI_HOST_RESTRICTION": "",
+  
+  "NAS_AUTH": "local",
+  "AMAZON_CLIENT_ID": null,
+  "AMAZON_CLIENT_SECRET": null,
+  "AZURE_CLIENT_ID": null,
+  "AZURE_CLIENT_SECRET": null,
+  "AZURE_REDIRECT_URL": null,
+  "AZURE_IDENTITY_URL": null,
+  "GOOGLE_CLIENT_ID": null,
+  "GOOGLE_CLIENT_SECRET": null,
+
+  "SMTP_HOST": null,
+  "SMTP_PORT": null,
+  "SMTP_SECURE": true,
+  "SMTP_USER": null,
+  "SMTP_PASSWORD": null,
+
+  "MJ_APIKEY_PUBLIC": null,
+  "MJ_APIKEY_PRIVATE": null
+}
