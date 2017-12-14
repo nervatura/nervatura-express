@@ -129,21 +129,21 @@ require('./lib/storage.js')({ data_store: conf.data_store,
       app.set('view engine', 'ejs');
         
       app.use(compression());
-      app.use(favicon(path.join(__dirname,'node_modules/nervatura/public/images/favicon.ico')));
+      app.use(favicon(path.join(util.getValidPath(),"..","public","images","favicon.ico")));
       //app.use(express.static(path.join(__dirname, 'public')));
-      app.use('/download', express.static(path.join(__dirname, 'node_modules/nervatura/public/download')));
-      app.use('/images', express.static(path.join(__dirname, 'node_modules/nervatura/public/images')));
-      app.use('/report', express.static(path.join(__dirname, 'node_modules/nervatura/public/report')));
+      app.use('/download', express.static(path.join(util.getValidPath(),"..","public","download")));
+      app.use('/images', express.static(path.join(util.getValidPath(),"..","public","images")));
+      app.use('/report', express.static(path.join(util.getValidPath(),"..","public","report")));
       app.use('/js', express.static(path.join(__dirname, 'lib/dist/js')));
       app.use('/css', express.static(path.join(__dirname, 'lib/dist/css')));
 
-      app.use('/lib/ntura', express.static(path.join(__dirname, 'node_modules/nervatura/public/js')));
-      app.use('/lib/w3', express.static(path.join(__dirname, 'node_modules/w3-css')));
-      app.use('/lib/highlightjs', express.static(path.join(__dirname, 'node_modules/highlightjs')));
-      app.use('/lib/jspdf', express.static(path.join(__dirname, 'node_modules/jspdf/dist')));
-      app.use('/lib/pdfjs', express.static(path.join(__dirname, 'node_modules/pdfjs-dist/build')));
-      app.use('/lib/icon', express.static(path.join(__dirname, 'node_modules/font-awesome')));
-      app.use('/lib/flatpickr', express.static(path.join(__dirname, 'node_modules/flatpickr/dist')));
+      app.use('/lib/ntura', express.static(path.join(util.getValidPath(),"..","public","js")));
+      app.use('/lib/w3', express.static(path.join(util.getValidPath(),"..","..","w3-css")));
+      app.use('/lib/highlightjs', express.static(path.join(util.getValidPath(),"..","..","highlightjs")));
+      app.use('/lib/jspdf', express.static(path.join(util.getValidPath(),"..","..","jspdf","dist")));
+      app.use('/lib/pdfjs', express.static(path.join(util.getValidPath(),"..","..","pdfjs-dist","build")));
+      app.use('/lib/icon', express.static(path.join(util.getValidPath(),"..","..","font-awesome")));
+      app.use('/lib/flatpickr', express.static(path.join(util.getValidPath(),"..","..","flatpickr","dist")));
       
       if ((app.get('env') === 'production')) {
         app.enable('trust proxy');
