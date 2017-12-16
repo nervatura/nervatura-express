@@ -43,7 +43,7 @@ router.get('/getData', function (req, res, next) {
   index(req.query, req, res);});
   
 function index(params, req, res) {
-  var sendResult = require('../lib/result.js').sendResult;
+  var sendResult = require('../lib/ext/result.js').sendResult;
   if (req.app.get("host_settings").ndi_host_restriction.length>0 && req.app.get("host_settings").ndi_host_restriction.indexOf(req.ip)===-1){
     sendResult(res, {type:"error", id:"host_restrict", ekey:"message", err_msg: "NDI "+req.app.locals.lang.insecure_err}); }
   else if (req.app.get("host_settings").ndi_host_restriction.length===0 && req.app.get("host_settings").all_host_restriction.length>0 

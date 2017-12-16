@@ -1,3 +1,8 @@
+## 2.6.2
+- START_PAGE static dir configs
+- nervatura 3.0.1 update
+- NDI Wizard: time fieldtype
+
 ## 2.6.1
 - Docker build bug fixes
 

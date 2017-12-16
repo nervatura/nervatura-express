@@ -44,11 +44,17 @@ var report = require('./routes/report');
 var wizard = require('./routes/wizard');
 var custom = require('./routes/custom');
 
+var app_settings = require('./lib/settings.json');
+try {
+  app_settings = require('./www/conf/settings.json'); } catch (error) {}
+var databases  = require('./lib/databases.json');
+try {
+  databases = require('./www/conf/databases.json'); } catch (error) {}
+
 var app = express();
 app.locals._ = _;
 app.set('env', process.env.NODE_ENV || 'development');
 
-var app_settings = require('./lib/settings.json');
 var conf =require('nervatura').conf(app_settings);
 app.set('conf', conf);
 
@@ -97,9 +103,8 @@ app.set('version_number', version);
 var util = require('nervatura').tools.DataOutput();
 var lang = require('nervatura').lang[conf.lang];
 app.locals.lang = lang;
-var databases  = require('./lib/databases.json');
 
-require('./lib/storage.js')({ data_store: conf.data_store,
+require('./lib/ext/storage.js')({ data_store: conf.data_store,
   databases: databases[app.get("host_type")] || databases.default,
   conf: conf, lang: lang, data_dir:app.get('data_dir'), host_type:app.get("host_type"), 
   callback:function(err, storage, host_settings){
@@ -129,7 +134,6 @@ require('./lib/storage.js')({ data_store: conf.data_store,
       app.set('view engine', 'ejs');
         
       app.use(compression());
-      app.use(favicon(path.join(util.getValidPath(),"..","public","images","favicon.ico")));
       //app.use(express.static(path.join(__dirname, 'public')));
       app.use('/download', express.static(path.join(util.getValidPath(),"..","public","download")));
       app.use('/images', express.static(path.join(util.getValidPath(),"..","public","images")));
@@ -173,9 +177,22 @@ require('./lib/storage.js')({ data_store: conf.data_store,
       app.use('/login', login);
       app.use(lusca.csrf({secret: conf.session_secret}));
       
+      var _favicon = favicon(path.join(util.getValidPath(),"..","public","images","favicon.ico"));
       switch (conf.start_page) {
         case "static":
-          app.use(express.static(path.join(__dirname, 'www')));
+          var www_path = path.join(__dirname, 'www')
+          var www_dirs = fs.readdirSync(www_path).filter(function(file) {
+            return fs.statSync(path.join(www_path, file)).isDirectory(); });
+          var www_root = app_settings.WWW_ROOT || "";
+          if(www_root !== ""){
+            app.use(express.static(path.join(www_path, app_settings.WWW_ROOT))); }
+          else {
+            app.use(express.static(path.join(__dirname, 'www')));}
+          try {
+            _favicon = favicon(path.join(www_path,"conf","favicon.ico")); } catch (error) {}
+          www_dirs.forEach(dir => {
+            if ((dir !== "conf") && ( www_root.indexOf(dir) === -1 ) ){
+              app.use('/'+dir, express.static(path.join(www_path, dir))); }});
           break;
         case "custom":
           app.use('/', custom);
@@ -183,6 +200,7 @@ require('./lib/storage.js')({ data_store: conf.data_store,
         default:
           app.use('/', ntura);
           break;}
+      app.use(_favicon);
       app.use('/ntura', ntura);
       app.use('/nas', nas);
       app.use('/report', report);

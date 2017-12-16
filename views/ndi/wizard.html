@@ -357,7 +357,7 @@
                             <option value="true" <%=data['update_'+data.nom+'_'+field.fieldname+'_'+(i+1)]==='true'? "selected=selected" : ""%> >true</option>
                             <option value="false" <%=data['update_'+data.nom+'_'+field.fieldname+'_'+(i+1)]==='false'? "selected=selected" : ""%> >false</option>
                           </select>
-                        <% } else if (field.fieldtype === 'date' || field.fieldtype === 'datetime') { %>
+                        <% } else if (field.fieldtype === 'date' || field.fieldtype === 'datetime' || field.fieldtype === 'time') { %>
                           <input class="w3-input w3-border w3-round margin-small-top" 
                             name="<%= 'update_'+data.nom+'_'+field.fieldname %>_<%= i+1 %>" 
                             id="<%= field.fieldname %>_<%= i+1 %>" data-role="<%= field.fieldtype %>"
@@ -451,7 +451,7 @@
                             <option value="true" <%=data['delete_'+data.nom+'_'+field.fieldname+'_'+(i+1)]==='true'? "selected=selected" : ""%> >true</option>
                             <option value="false" <%=data['delete_'+data.nom+'_'+field.fieldname+'_'+(i+1)]==='false'? "selected=selected" : ""%> >false</option>
                           </select>
-                        <% } else if (field.fieldtype === 'date' || field.fieldtype === 'datetime') { %>
+                        <% } else if (field.fieldtype === 'date' || field.fieldtype === 'datetime' || field.fieldtype === 'time') { %>
                           <input class="w3-input w3-border w3-round" 
                             name="<%= 'delete_'+data.nom+'_'+field.fieldname %>_<%= i+1 %>" 
                             id="<%= 'delete_'+data.nom+'_'+(i+1) %>" data-role="<%= field.fieldtype %>"
@@ -492,6 +492,8 @@
     flatpickr('input[data-role=date]', {
       allowInput: true});
     flatpickr('input[data-role=datetime]', {
-      allowInput: true, enableTime: true, time_24hr: true, defaultHour: 0 });
+      allowInput: true, enableTime: true, time_24hr: true, defaultHour: 0 },);
+    flatpickr('input[data-role=time]', {
+      allowInput: true, enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: true, defaultHour: 0 },);
   </script>
 </html>
