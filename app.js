@@ -148,6 +148,7 @@ require('./lib/ext/storage.js')({ data_store: conf.data_store,
       app.use('/lib/pdfjs', express.static(path.join(util.getValidPath(),"..","..","pdfjs-dist","build")));
       app.use('/lib/icon', express.static(path.join(util.getValidPath(),"..","..","font-awesome")));
       app.use('/lib/flatpickr', express.static(path.join(util.getValidPath(),"..","..","flatpickr","dist")));
+      app.use('/lib/base64', express.static(path.join(util.getValidPath(),"..","..","base64-js")));
       
       if ((app.get('env') === 'production')) {
         app.enable('trust proxy');
