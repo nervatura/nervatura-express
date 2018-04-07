@@ -1,7 +1,7 @@
 /*
 This file is part of the Nervatura Framework
 http://nervatura.com
-Copyright © 2011-2017, Csaba Kappel
+Copyright © 2011-2018, Csaba Kappel
 License: LGPLv3
 https://raw.githubusercontent.com/nervatura/nervatura/master/LICENSE
 */
@@ -175,25 +175,34 @@ require('./lib/ext/storage.js')({ data_store: conf.data_store,
       app.use(helmet());
       app.use(contentLength.validateMax({max: conf.max_content_length, status: 400, message: 'Too much content'}));
       
-      app.use('/login', login);
-      app.use(lusca.csrf({secret: conf.session_secret}));
-      
       var _favicon = favicon(path.join(util.getValidPath(),"..","public","images","favicon.ico"));
       switch (conf.start_page) {
         case "static":
-          var www_path = path.join(__dirname, 'www')
-          var www_dirs = fs.readdirSync(www_path).filter(function(file) {
-            return fs.statSync(path.join(www_path, file)).isDirectory(); });
-          var www_root = app_settings.WWW_ROOT || "";
-          if(www_root !== ""){
-            app.use(express.static(path.join(www_path, app_settings.WWW_ROOT))); }
-          else {
-            app.use(express.static(path.join(__dirname, 'www')));}
           try {
-            _favicon = favicon(path.join(www_path,"conf","favicon.ico")); } catch (error) {}
-          www_dirs.forEach(dir => {
-            if ((dir !== "conf") && ( www_root.indexOf(dir) === -1 ) ){
-              app.use('/'+dir, express.static(path.join(www_path, dir))); }});
+            var www_path = path.join(__dirname, 'www')
+            var vhosts = require(path.join(www_path, 'vhost.json'));
+            var vhost = require('vhost');
+            var vapp;
+            for (const dname in vhosts) {
+              if((dname === "*") || vhosts[dname].default){
+                vapp = app; }
+              else {
+                vapp = express();
+                app.use(vhost(dname, vapp)); }
+              var domain = vhosts[dname].static || vhosts[dname].default;
+              if(domain){
+                for (const dpath in domain) {
+                  vapp.use(dpath, express.static(path.join(www_path, domain[dpath]))); }}
+              if(vhosts[dname].route){
+                try {
+                  for (const dpath in vhosts[dname].route) {
+                    var vroute = require(path.join(www_path, vhosts[dname].route[dpath]));
+                    vapp.use(dpath, vroute); }
+                } catch (error) {}}
+              if(vhosts[dname].favicon){
+                _favicon = favicon(path.join(www_path, vhosts[dname].favicon)); }}} 
+          catch(e) {
+            app.use(express.static(path.join(__dirname, 'www'))); }
           break;
         case "custom":
           app.use('/', custom);
@@ -201,8 +210,12 @@ require('./lib/ext/storage.js')({ data_store: conf.data_store,
         default:
           app.use('/', ntura);
           break;}
+      
       app.use(_favicon);
+      app.use('/login', login);
       app.use('/ntura', ntura);
+
+      app.use(lusca.csrf({secret: conf.session_secret}));
       app.use('/nas', nas);
       app.use('/report', report);
       app.use('/ndi/wizard', wizard);

@@ -1,0 +1,20 @@
+{
+  "*": {
+    "static": {
+      "/ntouch": "ntouch"
+    },
+    "route": {
+      "/api": "routes/api.js"
+    }
+  },
+  "example.com": {
+    "static": {
+      "/": "example_dir"
+    }
+  },
+  "*.example.com": {
+    "static": {
+      "/": "example_dir"
+    }
+  }
+}

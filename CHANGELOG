@@ -1,3 +1,7 @@
+## 2.6.4
+- www static dir virtual host support
+- Nervatura Booking Sample Application
+
 ## 2.6.3
 - NDI Wizard base64 and encode bug fixes
 
