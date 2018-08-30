@@ -3,6 +3,7 @@
   "START_PAGE": "ntura",
   
   "DATA_DIR": "data",
+  "REPORT_DIR": "",
   "PYTHON2_PATH": "python",
   "DATA_STORE": "lokijs",
 
