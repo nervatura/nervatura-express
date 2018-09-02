@@ -46,10 +46,18 @@ var custom = require('./routes/custom');
 
 var app_settings = require('./lib/settings.json');
 try {
-  app_settings = require('./www/conf/settings.json'); } catch (error) {}
+  app_settings = require('../../www/conf/settings.json'); } 
+catch (error) {
+  try {
+    app_settings = require('./www/conf/settings.json');
+  } catch (error) {}}
 var databases  = require('./lib/databases.json');
 try {
-  databases = require('./www/conf/databases.json'); } catch (error) {}
+  databases = require('../../www/conf/databases.json'); } 
+catch (error) {
+  try {
+    databases = require('./www/conf/databases.json');
+  } catch (error) {}}
 
 var app = express();
 app.locals._ = _;
@@ -178,8 +186,11 @@ require('./lib/ext/storage.js')({ data_store: conf.data_store,
       var _favicon = favicon(path.join(util.getValidPath(),"..","public","images","favicon.ico"));
       switch (conf.start_page) {
         case "static":
+          var www_path = path.join(__dirname, 'www')
+          if (fs.statSync(path.join(__dirname, '..', '..', 'www')).isDirectory()){
+            www_path = path.join(__dirname, '..', '..', 'www') 
+          }
           try {
-            var www_path = path.join(__dirname, 'www')
             var vhosts = require(path.join(www_path, 'vhost.json'));
             var vhost = require('vhost');
             var vapp;
@@ -202,7 +213,7 @@ require('./lib/ext/storage.js')({ data_store: conf.data_store,
               if(vhosts[dname].favicon){
                 _favicon = favicon(path.join(www_path, vhosts[dname].favicon)); }}} 
           catch(e) {
-            app.use(express.static(path.join(__dirname, 'www'))); }
+            app.use(express.static(www_path)); }
           break;
         case "custom":
           app.use('/', custom);
