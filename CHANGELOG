@@ -1,3 +1,6 @@
+## 2.7.0
+- NAS: move some special functions from nervatura-core (/lib/ext/nas.js)
+
 ## 2.6.6
 - static root dir (nervatura-express node_modules install) support
 

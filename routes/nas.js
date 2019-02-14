@@ -1,7 +1,7 @@
 /*
 This file is part of the Nervatura Framework
 http://nervatura.com
-Copyright © 2011-2018, Csaba Kappel
+Copyright © 2011-2019, Csaba Kappel
 License: LGPLv3
 https://raw.githubusercontent.com/nervatura/nervatura/master/LICENSE
 */
@@ -10,10 +10,11 @@ var express = require('express');
 var router = express.Router();
 
 var nas = require('nervatura').nas();
+var nasExt = require('../lib/ext/nas.js')();
 var lang; var validator;
 
 router.use(function (req, res, next) {
-  validator = nas.validUser(req);
+  validator = nasExt.validUser(req);
   lang = req.app.locals.lang;
   next()});
 
@@ -22,14 +23,14 @@ router.get('/', function(req, res, next) {
 
 router.get('/index', function(req, res, next) {
   if (validator === "ok"){
-    nas.pageRender({res:res, page:"index", 
+    nasExt.pageRender({res:res, page:"index", 
       data:{subtitle:lang.title_home, flash:null, user:req.user}});}
   else {
     res.redirect(validator);}});  
 
 router.get('/user/list', function(req, res, next) {
   if (validator === "ok"){
-    nas.userList({res:res, req:req, next:next, data:{flash:null}});}
+    nasExt.userList({res:res, req:req, next:next, data:{flash:null}});}
   else {
     res.redirect(validator);}});
 
@@ -40,15 +41,15 @@ router.post('/user/list', function(req, res, next) {
       function(err, message){
         if (err) {return next(err);}
         else {
-          nas.userList({res:res, req:req, next:next, data:{flash:message}});}});}
+          nasExt.userList({res:res, req:req, next:next, data:{flash:message}});}});}
     else if (req.body.update_cmd === "delete"){
       req.app.settings.storage.deleteUser(req.body.username,
       function(err, message){
         if (err) {return next(err);}
         else {
-          nas.userList({res:res, req:req, next:next, data:{flash:message}});}});}
+          nasExt.userList({res:res, req:req, next:next, data:{flash:message}});}});}
     else {
-      nas.userList({res:res, req:req, next:next, data:{flash:null}});}}
+      nasExt.userList({res:res, req:req, next:next, data:{flash:null}});}}
   else {
     res.redirect(validator);}});
 
@@ -57,7 +58,7 @@ router.get('/user/password', function(req, res, next) {
     var flash = null;
     if(req.user.dirty_password){
       flash = lang.dirty_password;}
-    nas.pageRender({res:res, page:"password", 
+    nasExt.pageRender({res:res, page:"password", 
       data:{subtitle:lang.label_change_password, flash:flash}});}
   else {
     res.redirect(validator);}});
@@ -70,14 +71,14 @@ router.post('/user/password', function(req, res, next) {
       function(err, message){
         if (err) {return next(err);}
         else {
-          nas.pageRender({res:res, page:"password", 
+          nasExt.pageRender({res:res, page:"password", 
             data:{subtitle:lang.label_change_password, flash:message}});}});}
   else {
     res.redirect(validator);}});
 
 router.get('/database/list', function(req, res, next) {
   if (validator === "ok"){
-    nas.databaseList({res:res, req:req, next:next, data:{flash:null}});}
+    nasExt.databaseList({res:res, req:req, next:next, data:{flash:null}});}
   else {
     res.redirect(validator);}});
 
@@ -90,14 +91,14 @@ router.get('/database/edit', function(req, res, next) {
       params.data.data = {alias:"", engine:"sqlite", 
         connect:{host:"", port:"", dbname:"", username:"", password:""},
         settings:{ndi_enabled:true, encrypt_password:"", dbs_host_restriction:""}};
-      nas.pageRender(params);}
+      nasExt.pageRender(params);}
     else {
       req.app.settings.storage.getDbsFromAlias(req.query.alias,
         function(err, data){
           if (err) {return next(err);}
           else {
             params.data.data = data;
-            nas.pageRender(params);}});}}
+            nasExt.pageRender(params);}});}}
   else {
     res.redirect(validator);}});
 
@@ -107,20 +108,20 @@ router.post('/database/list', function(req, res, next) {
       req.app.settings.storage.updateDatabase(req.body, function(err, message){
         if (err) {return next(err);}
         else {
-          nas.databaseList({res:res, req:req, next:next, data:{flash:message}});}});}
+          nasExt.databaseList({res:res, req:req, next:next, data:{flash:message}});}});}
     else if (req.body.update_cmd === "delete"){
       req.app.settings.storage.deleteDatabase(req.body.alias, function(err, message){
         if (err) {return next(err);}
         else {
-          nas.databaseList({res:res, req:req, next:next, data:{flash:message}});}});}
+          nasExt.databaseList({res:res, req:req, next:next, data:{flash:message}});}});}
     else {
-      nas.databaseList({res:res, req:req, next:next, data:{flash:null}});}}
+      nasExt.databaseList({res:res, req:req, next:next, data:{flash:null}});}}
   else {
     res.redirect(validator);}});
     
 router.get('/database/create', function(req, res, next) {
   if (validator === "ok"){
-    nas.databaseList({res:res, req:req, next:next,
+    nasExt.databaseList({res:res, req:req, next:next,
       data:{view:"create", subtitle:lang.label_creation, form:{}, flash:null}});}
   else {
     res.redirect(validator);}});
@@ -128,17 +129,17 @@ router.get('/database/create', function(req, res, next) {
 router.post('/database/create', function(req, res, next) {
   if (validator === "ok"){
     req.setTimeout(req.app.settings.conf.long_timeout);
-    var nstore = require('nervatura').nervastore(nas.getNstoreParams(req));
+    var nstore = require('nervatura').nervastore(nasExt.getNstoreParams(req));
     nas.createDatabase(nstore, {database:req.body.alias}, function(err, logstr){
       var form = req.body; form.message = logstr;
-      nas.databaseList({res:res, req:req, next:next,
+      nasExt.databaseList({res:res, req:req, next:next,
       data:{view:"create", subtitle:lang.label_creation, form:form, flash:null}});});}
   else {
     res.redirect(validator);}});
 
 router.get('/database/export', function(req, res, next) {
   if (validator === "ok"){
-    nas.databaseList({res:res, req:req, next:next,
+    nasExt.databaseList({res:res, req:req, next:next,
       data:{view:"export", subtitle:lang.label_export, form:{}, flash:null}});}
   else {
     res.redirect(validator);}});
@@ -146,14 +147,14 @@ router.get('/database/export', function(req, res, next) {
 router.post('/database/export', function(req, res, next) {
   if (validator === "ok"){
      req.setTimeout(req.app.settings.conf.long_timeout);
-    var nstore = require('nervatura').nervastore(nas.getNstoreParams(req));
-    nas.exportDatabase(nstore, 
+    var nstore = require('nervatura').nervastore(nasExt.getNstoreParams(req));
+    nasExt.exportDatabase(nstore, 
       {res:res, database:req.body.alias, filename:req.body.filename, format:req.body.format,
        version: req.app.settings.version_number, export_dir:req.app.get('data_dir')+'/data'}, 
       function(err, logstr, result){
         if(err || req.body.filename !== "download"){
           var form = req.body; form.message = logstr;
-          nas.databaseList({res:res, req:req, next:next,
+          nasExt.databaseList({res:res, req:req, next:next,
             data:{view:"export", subtitle:lang.label_export, 
               form:form, flash:null}});}
         else {
@@ -163,7 +164,7 @@ router.post('/database/export', function(req, res, next) {
 
 router.get('/database/import', function(req, res, next) {
   if (validator === "ok"){
-    nas.importList({res:res, req:req, next:next,
+    nasExt.importList({res:res, req:req, next:next,
       data:{view:"import", import_dir:req.app.get('data_dir')+'/data',
         subtitle:lang.label_import, form:{}, filenames:[], flash:null}});}
   else {
@@ -172,13 +173,13 @@ router.get('/database/import', function(req, res, next) {
 router.post('/database/import', function(req, res, next) {
   if (validator === "ok"){
     req.setTimeout(req.app.settings.conf.long_timeout);
-    var nstore = require('nervatura').nervastore(nas.getNstoreParams(req));
-    nas.importDatabase(nstore, 
+    var nstore = require('nervatura').nervastore(nasExt.getNstoreParams(req));
+    nasExt.importDatabase(nstore, 
       {database:req.body.alias, filename:req.body.filename, 
        import_dir:req.app.get('data_dir')+'/data'}, 
       function(err, logstr){
         var form = req.body; form.message = logstr;
-        nas.importList({res:res, req:req, next:next,
+        nasExt.importList({res:res, req:req, next:next,
           data:{view:"import", import_dir:req.app.get('data_dir')+'/data',
             subtitle:lang.label_import, form:form, filenames:[], flash:null}});});}
   else {
@@ -186,7 +187,7 @@ router.post('/database/import', function(req, res, next) {
 
 router.get('/report', function(req, res, next) {
   if (validator === "ok"){
-    nas.reportRender({res:res, storage:req.app.settings.storage, 
+    nasExt.reportRender({res:res, storage:req.app.settings.storage, 
       data:{subtitle:lang.label_reports, form:{}, flash:null}});}
   else {
     res.redirect(validator);}});
@@ -199,47 +200,47 @@ router.post('/report', function(req, res, next) {
         form.alias = req.body.update_database;}
       if (req.body.update_group !== ""){
         form.group = req.body.update_group;}}
-    var nstore = require('nervatura').nervastore(nas.getNstoreParams(req));
+    var nstore = require('nervatura').nervastore(nasExt.getNstoreParams(req));
     if (form.alias !== ""){
       nstore.local.setEngine({database:form.alias}, function(err, result){
         form.engine = result;
         if (err){
-          nas.reportList(nstore, {res:res, form:form}, err);}
+          nasExt.reportList(nstore, {res:res, form:form}, err);}
         else {
           if (req.body.update_cmd === "install"){
-            nas.reportInstall(nstore, {res:res, form:form});}
+            nasExt.reportInstall(nstore, {res:res, form:form});}
           else if (req.body.update_cmd === "delete"){
             nas.reportDelete(nstore, {reportkey:form.update_reportkey},
-              function(err){nas.reportList(nstore, {res:res, form:form}, err);});}
+              function(err){nasExt.reportList(nstore, {res:res, form:form}, err);});}
           else if (req.body.update_cmd === "edit"){
-            nas.reportEdit(nstore, {res:res, form:form});}
+            nasExt.reportEdit(nstore, {res:res, form:form});}
           else if (req.body.update_cmd === "update"){
-            nas.reportUpdate(nstore, form, 
-              function(err){nas.reportList(nstore, {res:res, form:form}, err);});}
+            nasExt.reportUpdate(nstore, form, 
+              function(err){nasExt.reportList(nstore, {res:res, form:form}, err);});}
           else {
-            nas.reportList(nstore, {res:res, form:form}, null);}}});}
+            nasExt.reportList(nstore, {res:res, form:form}, null);}}});}
     else {
-      nas.reportList(nstore, {res:res, form:form}, null);}}
+      nasExt.reportList(nstore, {res:res, form:form}, null);}}
   else {
     res.redirect(validator);}});
     
 router.get('/setting/list', function(req, res, next) {
   if (validator === "ok"){
-    nas.settingList({res:res, req:req, next:next, data:{flash:null}});}
+    nasExt.settingList({res:res, req:req, next:next, data:{flash:null}});}
   else {
     res.redirect(validator);}});
 
 router.post('/setting/update', function(req, res, next) {
   if (validator === "ok"){
-    var setting_err = nas.validSetting(req.app.settings.conf.nas_login, req.body, lang)
+    var setting_err = nasExt.validSetting(req.app.settings.conf.nas_login, req.body, lang)
     if(setting_err === null){
       req.app.settings.storage.updateSetting(req.body, function(err, message){
         if (err) {return next(err);}
         else {
           req.app.get('host_settings')[req.body.fieldname] = req.body.value
-          nas.settingList({res:res, req:req, next:next, data:{flash:message}});}});}
+          nasExt.settingList({res:res, req:req, next:next, data:{flash:message}});}});}
     else{
-      nas.settingList({res:res, req:req, next:next, data:{flash:setting_err}});}}
+      nasExt.settingList({res:res, req:req, next:next, data:{flash:setting_err}});}}
   else {
     res.redirect(validator);}});
     
@@ -249,7 +250,7 @@ router.post('/setting/delete', function(req, res, next) {
     function(err, message){
       if (err) {return next(err);}
       else {
-        nas.settingList({res:res, req:req, next:next, data:{flash:message}});}});}
+        nasExt.settingList({res:res, req:req, next:next, data:{flash:message}});}});}
   else {
     res.redirect(validator);}});
  
