@@ -1,6 +1,6 @@
 {
   "name": "nervatura-express",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "description": "Nervatura Express Package",
   "keywords": [
     "business management",
@@ -60,7 +60,7 @@
     "lusca": "^1.6.1",
     "method-override": "^3.0.0",
     "morgan": "^1.9.0",
-    "nervatura": "^3.2.0",
+    "nervatura": "^3.2.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pdfjs-dist": "^2.0.943",
@@ -81,7 +81,6 @@
     "nodemailer": "^4.2.0"
   },
   "devDependencies": {
-    "pouchdb-node": "^6.3.4",
     "printer": "^0.2.1"
   }
 }

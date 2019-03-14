@@ -25,12 +25,7 @@ router.get('/index', function(req, res, next) {
   res.render('report/index.html',{view:"index"});});
 
 router.get('/server', function(req, res, next) {
-  var flash;
-  const exec = require('child_process').exec;
-  exec(req.app.get("conf").python2_path+" -V", function(err, stdout, stderr){
-      if (err || stderr.indexOf("Python 2.")===-1) {
-        flash = req.app.locals.lang.invalid_python_path;}
-     res.render('report/index.html',{flash:flash, view:"server"});});});
+  res.render('report/index.html',{flash:"", view:"server"});});
 
 router.all('/document', function(req, res, next) {
   var orient = "portrait"; var format = "pdf";

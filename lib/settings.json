@@ -4,7 +4,6 @@
   
   "DATA_DIR": "data",
   "REPORT_DIR": "",
-  "PYTHON2_PATH": "python",
   "DATA_STORE": "lokijs",
 
   "LONG_TIMEOUT": 240000,  
