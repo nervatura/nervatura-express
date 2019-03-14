@@ -10,7 +10,10 @@ https://raw.githubusercontent.com/nervatura/nervatura/master/LICENSE
 
 var express = require('express');
 var router = express.Router();
-var PyShell = require('python-shell');
+var util = require('nervatura').tools.DataOutput();
+var Report = require('nervatura-report/dist/report.node')
+var fs = require('fs');
+var path = require('path');
 
 router.use(function (req, res, next) {
   next()});
@@ -30,69 +33,37 @@ router.get('/server', function(req, res, next) {
      res.render('report/index.html',{flash:flash, view:"server"});});});
 
 router.all('/document', function(req, res, next) {
-  var orient = "p"; var format = "pdf"; var method = "load_report_xml";
+  var orient = "portrait"; var format = "pdf";
   if (req.query.data || req.body.data){
     format = "xml";}
-  if (req.query.html || req.body.html){
-    format = "html";}
   if (req.query.landscape || req.body.landscape){
-    orient = "l";}
-  if (req.query.py || req.body.py){
-    method = "create_report_sample"}
-    
-  const exec = require('child_process').exec;
-  exec(req.app.get("conf").python2_path+" -V", function(err, stdout, stderr){
-    if (err || stderr.indexOf("Python 2.")===-1) {
-      res.end(req.app.locals.lang.invalid_python_path);}
-    else{
-      var ps = new PyShell("pylib.py", {
-        args: [method,orient,format,req.app.get("conf").python_script+"/report/sample.xml"],
-        pythonPath: req.app.get("conf").python2_path,
-        scriptPath: req.app.get("conf").python_script,
-        mode: 'text', pythonOptions: ['-u']});
-      var output = '';
-      ps.stdout.on('data', function (data) {
-        output += ''+data;});
-      ps.end(function (err) {
-        if (err) {
-          return next(err);}
-        else {
-          switch (format) {
-            case "pdf":
-              res.setHeader('Content-Type', 'application/pdf');
-              res.end(new Buffer(output, 'base64'));
-              break;
-            case "xml":
-              res.set('Content-Type', 'text/xml');
-              res.end(output);
-              break;
-            default:
-              res.set('Content-Type', 'text/html');
-              res.end(output);
-              break;}}});}});});
+    orient = "landscape";}
+  
+  var rpt = new Report(orient);
+  if (req.query.json || req.body.json){
+    var json_template = fs.readFileSync(path.join(util.getValidPath(),"..","report","sample.json"), "utf8").toString()
+    rpt.loadJsonDefinition(json_template);
+  } else {
+    var xml_template = fs.readFileSync(path.join(util.getValidPath(),"..","report","sample.xml"), "utf8").toString()
+    rpt.loadDefinition(xml_template);
+  }
+  rpt.createReport();
+  if(format === "xml"){
+    res.set('Content-Type', 'text/xml');
+    res.end(rpt.save2Xml());
+  } else {
+    rpt.save2Pdf((pdf) => {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.end(new Buffer(pdf));
+    })}
+  });
 
 router.get('/template', function(req, res, next) {
-  if (req.query.py){
-    const exec = require('child_process').exec;
-    exec(req.app.get("conf").python2_path+" -V", function(err, stdout, stderr){
-      if (err || stderr.indexOf("Python 2.")===-1) {
-        res.end(req.app.locals.lang.invalid_python_path);}
-      else{
-        var ps = new PyShell("pylib.py", {
-          args: ["get_source","create_report_sample"],
-          pythonPath: req.app.get("conf").python2_path,
-          scriptPath: req.app.get("conf").python_script,
-          mode: 'text', pythonOptions: ['-u']});
-        var output = '';
-        ps.stdout.on('data', function (data) {
-          output += ''+data;});
-        ps.end(function (err) {
-          if (err) {
-            return next(err);}
-          else {
-            res.render('report/python.html',{python_code:output});}});}});}
-  else {
-    res.download(req.app.get("conf").python_script+"/report/sample.xml", 'sample.xml', function(err){
+  if (req.query.json){
+    res.download(path.join(util.getValidPath(),"..","report","sample.json"), 'sample.json', function(err){
+      if(err){return next(err);}});
+  } else {
+    res.download(path.join(util.getValidPath(),"..","report","sample.xml"), 'sample.xml', function(err){
       if(err){return next(err);}});}});
 
 router.get('/client', function(req, res, next) {

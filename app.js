@@ -152,7 +152,7 @@ require('./lib/ext/storage.js')({ data_store: conf.data_store,
       app.use('/lib/ntura', express.static(path.join(util.getValidPath(),"..","public","js")));
       app.use('/lib/w3', express.static(path.join(util.getValidPath(),"..","..","w3-css")));
       app.use('/lib/highlightjs', express.static(path.join(util.getValidPath(),"..","..","highlightjs")));
-      app.use('/lib/jspdf', express.static(path.join(util.getValidPath(),"..","..","jspdf","dist")));
+      app.use('/lib/report', express.static(path.join(util.getValidPath(),"..","..","nervatura-report","dist")));
       app.use('/lib/pdfjs', express.static(path.join(util.getValidPath(),"..","..","pdfjs-dist","build")));
       app.use('/lib/icon', express.static(path.join(util.getValidPath(),"..","..","font-awesome")));
       app.use('/lib/flatpickr', express.static(path.join(util.getValidPath(),"..","..","flatpickr","dist")));

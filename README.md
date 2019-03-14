@@ -15,7 +15,7 @@ Start the server
 
 * development mode:
 ```
-  $ npm run dev
+  $ NODE_ENV=development node server.js
 ```
 and [http://localhost:8080/](http://localhost:8080/)
 
