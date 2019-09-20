@@ -9,7 +9,7 @@ Please see more the [Nervatura Core Package](https://github.com/nervatura/nervat
 
     $ git clone https://github.com/nervatura/nervatura-express.git nervatura
     $ cd nervatura
-    $ npm install --production
+    $ npm install
 
 Start the server
 
@@ -25,14 +25,8 @@ and [http://localhost:8080/](http://localhost:8080/)
 ```
 and [https://localhost:8080/](https://localhost:8080/)
 
-Please see more the [Admin Guide](https://rawgit.com/nervatura/nervatura/master/views/docs/nas.html):
-  * Nervatura packages
-  * Cloud Hosting Services
-  * Server config
-  * Other recipes
-
 ## Docs & Community
 
-[Nervatura Wiki](https://github.com/nervatura/nervatura/wiki)
+Please see more the [Nervatura Docs](https://nervatura.github.io/nervatura-docs)
 
 More info see http://nervatura.com.

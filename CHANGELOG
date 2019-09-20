@@ -1,3 +1,12 @@
+## 3.0.0
+- based on the nervatura v4.*
+- nervatura API support
+- API and NPI Bearer Authentication support
+- external token authorization (currently Firebase) support
+- all settings are based on environment variables
+- new static UI based on nervatura-docs, nervatura-demo and nervatura-client packages
+- all unnecessary packages, ui and settings have been removed
+
 ## 2.8.1
 - remove all python dependencies
 
