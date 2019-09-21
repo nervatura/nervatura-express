@@ -1,6 +1,6 @@
 {
   "name": "nervatura-express",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Nervatura Express Package",
   "keywords": [
     "business management",
@@ -54,7 +54,7 @@
     "moment": "^2.24.0",
     "morgan": "^1.9.0",
     "nervatura": "^4.0.0",
-    "nervatura-client": "^2.4.1",
+    "nervatura-client": "^2.4.2",
     "nervatura-demo": "^1.3.0",
     "nervatura-docs": "^1.0.1",
     "passport": "^0.4.0",
