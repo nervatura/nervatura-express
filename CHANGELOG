@@ -1,3 +1,6 @@
+## 3.0.2
+ - external JWT X509 public keys supports: NT_CERT_GOOGLE -> NT_JWK_X509 environment variable
+
 ## 3.0.1
 - updated the app.yaml(App Engine), manifest.yml(ibm cloud), node-settings.config(aws) files
 
