@@ -127,12 +127,12 @@ module.exports = function () {
     }
   } else {
     app.get('/', function(req, res, next) {
-      res.redirect('/docs');
+      res.redirect('/docs/');
     });
   }
-  app.use('/docs', express.static('node_modules/nervatura-docs/docs'));
-  app.use('/report', express.static('node_modules/nervatura-demo/docs'));
-  app.use('/client', express.static('node_modules/nervatura-client/build'));
+  app.use('/docs/', express.static('node_modules/nervatura-docs/docs'));
+  app.use('/report/', express.static('node_modules/nervatura-demo/docs'));
+  app.use('/client/', express.static('node_modules/nervatura-client/build'));
   app.use(_favicon);
   
   // catch 404 and forward to error handler
