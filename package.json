@@ -1,6 +1,6 @@
 {
   "name": "nervatura-express",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Nervatura Express Package",
   "keywords": [
     "business management",
@@ -37,27 +37,27 @@
     "node": ">= 6"
   },
   "dependencies": {
-    "async": "^3.1.0",
+    "async": "^3.2.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "debug": "^4.1.1",
-    "dotenv": "^8.1.0",
-    "ejs": "^2.7.1",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
     "express": "^4.17.1",
     "express-content-length-validator": "^1.0.0",
     "express-enforces-ssl": "^1.1.0",
-    "helmet": "^3.21.1",
-    "hpp": "^0.2.1",
+    "helmet": "^3.22.0",
+    "hpp": "^0.2.3",
     "lodash": "^4.17.15",
     "method-override": "^3.0.0",
-    "moment": "^2.24.0",
-    "morgan": "^1.9.0",
-    "nervatura": "^4.0.2",
-    "nervatura-client": "^2.4.2",
-    "nervatura-demo": "^1.3.1",
-    "nervatura-docs": "^1.0.4",
-    "passport": "^0.4.0",
+    "moment": "^2.25.3",
+    "morgan": "^1.10.0",
+    "nervatura": "^4.0.5",
+    "nervatura-client": "^2.4.4",
+    "nervatura-demo": "^1.3.5",
+    "nervatura-docs": "^1.0.7",
+    "passport": "^0.4.1",
     "passport-http-bearer": "^1.0.1",
     "serve-favicon": "^2.5.0",
     "vhost": "^3.0.2"
@@ -65,12 +65,12 @@
   "optionalDependencies": {
     "any-db-mssql": "^0.1.0",
     "any-db-mysql": "^2.1.2",
-    "any-db-postgres": "^2.1.4",
+    "any-db-postgres": "^2.1.5",
     "any-db-sqlite3": "^2.1.4",
-    "node-mailjet": "^3.2.1",
-    "nodemailer": "^4.2.0"
+    "node-mailjet": "^3.3.1",
+    "nodemailer": "^6.4.6"
   },
   "devDependencies": {
-    "printer": "^0.2.1"
+    "printer": "^0.4.0"
   }
 }

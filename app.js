@@ -81,6 +81,9 @@ module.exports = function () {
   app.use(helmet());
   app.use(contentLength.validateMax({ max: process.env.NT_CONTENT_LENGTH || 20000, status: 400, message: 'Too much content' }));
 
+  app.use('/docs', express.static('node_modules/nervatura-docs/docs'));
+  app.use('/report', express.static('node_modules/nervatura-demo/docs'));
+  app.use('/client', express.static('node_modules/nervatura-client/build'));
   var _favicon = favicon(path.join("www", "favicon.ico"));
   if(process.env.NT_START_PAGE !== "default"){
     var www_path = path.join(__dirname, 'www')
@@ -130,9 +133,6 @@ module.exports = function () {
       res.redirect('/docs/');
     });
   }
-  app.use('/docs/', express.static('node_modules/nervatura-docs/docs'));
-  app.use('/report/', express.static('node_modules/nervatura-demo/docs'));
-  app.use('/client/', express.static('node_modules/nervatura-client/build'));
   app.use(_favicon);
   
   // catch 404 and forward to error handler
