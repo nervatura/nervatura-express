@@ -35,7 +35,7 @@ var AppContainer = function () {
   self.setupServer = function () {
 
     var app = require('./app')()
-    var port = normalizePort(process.env.NT_PORT || '8080');
+    var port = normalizePort(process.env.NT_EXPRESS_PORT || '8080');
     app.set('port', port);
 
     var server = require('http').createServer(app);

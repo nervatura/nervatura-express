@@ -1,7 +1,7 @@
 /*
 This file is part of the Nervatura Framework
 http://nervatura.com
-Copyright © 2011-2019, Csaba Kappel
+Copyright © 2011-2021, Csaba Kappel
 License: LGPLv3
 https://raw.githubusercontent.com/nervatura/nervatura/master/LICENSE
 */
@@ -10,21 +10,21 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
-var ntura = require('nervatura').models;
-var api = require('nervatura').api;
+var cli = require('../lib/cli');
+var Models = require('../lib/result').Models;
 
 router.use(function (req, res, next) {
   next()
 });
 
 router.post('/auth/login', function (req, res, next) {
-  api(req.user).AuthUserLogin(req.body, function(err, data){
-      if(err){
-        sendResult(res, 400, {code:400, message: err})
-      } else {
-        sendResult(res, 200, data);
-      }
-    })
+  cli.UserLogin(req.body, function(err, data){
+    if(err){
+      sendResult(res, 400, {code:400, message: err})
+    } else {
+      sendResult(res, 200, data);
+    }
+  })
 });
 
 router.post('/auth/password', passport.authenticate('bearer', { session: false }), function (req, res, next) {
@@ -32,14 +32,7 @@ router.post('/auth/password', passport.authenticate('bearer', { session: false }
   if((params.username || params.custnumber) && (req.authInfo.scope !== "admin")){
     sendResult(res, 401);
   } else {
-    if(!params.username && !params.custnumber){
-      if(req.user.customer()){
-        params.custnumber = req.user.customer().custnumber
-      } else {
-        params.username = req.user.employee().username
-      }
-    }
-    api(req.user).AuthPassword(params, function(err, data){
+    cli.UserPassword(req.authInfo.token, params, function(err, data){
       if(err){
         sendResult(res, 400, {code:400, message: err})
       } else {
@@ -50,12 +43,18 @@ router.post('/auth/password', passport.authenticate('bearer', { session: false }
 });
 
 router.get('/auth/refresh', passport.authenticate('bearer', { session: false }), function (req, res, next) {
-  sendResult(res, 200, api(req.user).AuthToken())
+  cli.TokenRefresh(req.authInfo.token, function(err, data){
+    if(err){
+      sendResult(res, 400, {code:400, message: err})
+    } else {
+      sendResult(res, 200, data);
+    }
+  })
 })
 
-router.get('/report', passport.authenticate('bearer', { session: false }), function (req, res, next) {
-  var params = req.query
-  api(req.user).Report(params, function(err, data){
+router.all('/report', passport.authenticate('bearer', { session: false }), function (req, res, next) {
+  var params = (req.method === "GET") ? req.query : req.body
+  cli.Report(req.authInfo.token, params, function(err, data){
     if(err){
       sendResult(res, 400, {code:400, message: err})
     } else {
@@ -64,10 +63,10 @@ router.get('/report', passport.authenticate('bearer', { session: false }), funct
         res.set('Content-Type', 'application/json');
         result = data
       } else {
-        if(data.filetype === "xlsx"){
-          res.setHeader('Content-Disposition', 'attachment; filename=Report.xlsx');
-          res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-          result = data.template
+        if(data.filetype === "csv"){
+          res.setHeader('Content-Disposition', 'attachment; filename=Report.csv');
+          res.set('Content-Type', 'text/csv');
+          result = Buffer.from(data.template, 'base64')
         } else {
           if(data.filetype === "ntr" && params.output === "xml"){
             res.setHeader('Content-Disposition', 'attachment; filename=Report.xml');
@@ -76,6 +75,9 @@ router.get('/report', passport.authenticate('bearer', { session: false }), funct
           } else {
             res.setHeader('Content-Disposition', 'attachment; filename=Report.pdf');
             res.set('Content-Type', 'application/pdf');
+            if(data.filetype === "base64"){
+              data.template = Buffer.from(data.template.substring(data.template.indexOf(";base64,")+8), 'base64')
+            }
             result = data.template
           }
         }
@@ -86,9 +88,9 @@ router.get('/report', passport.authenticate('bearer', { session: false }), funct
 });
 
 router.get('/report/list', passport.authenticate('bearer', { session: false }), function (req, res, next) {
-  var params = { filters: { group: req.query.label } }
+  var params = { label: req.query.label }
   if(req.authInfo.scope === "admin"){
-    api(req.user).ReportList(params, function(err, data){
+    cli.ReportList(req.authInfo.token, params, function(err, data){
       if(err){
         sendResult(res, 400, {code:400, message: err})
       } else {
@@ -102,7 +104,7 @@ router.get('/report/list', passport.authenticate('bearer', { session: false }), 
 
 router.post('/report/install', passport.authenticate('bearer', { session: false }), function (req, res, next) {
   if(req.authInfo.scope === "admin"){
-    api(req.user).ReportInstall(req.query, function(err, id){
+    cli.ReportInstall(req.authInfo.token, req.query, function(err, id){
       if(err){
         sendResult(res, 400, {code:400, message: err})
       } else {
@@ -116,7 +118,7 @@ router.post('/report/install', passport.authenticate('bearer', { session: false 
 
 router.delete('/report/delete', passport.authenticate('bearer', { session: false }), function (req, res, next) {
   if(req.authInfo.scope === "admin"){
-    api(req.user).ReportDelete(req.query, function(err, data){
+    cli.ReportDelete(req.authInfo.token, req.query, function(err, data){
       if(err){
         sendResult(res, 400, {code:400, message: err})
       } else {
@@ -130,22 +132,18 @@ router.delete('/report/delete', passport.authenticate('bearer', { session: false
 
 
 router.post('/database', function (req, res, next) {
-  if(req.headers["x-api-key"] === process.env.NT_API_KEY){
-    var params = { database: req.query.alias, demo: req.query.demo || "false" }
-    api(req.user).DatabaseCreate(params, function(err, results){
-      if(err){
-        sendResult(res, 400, {code:400, message: err, data: results})
-      } else {
-        sendResult(res, 200, results);
-      }
-    })
-  } else {
-    sendResult(res, 401);
-  }
+  var params = { database: req.query.alias, demo: req.query.demo || "false" }
+  cli.DatabaseCreate(req.headers["x-api-key"], params, function(err, results){
+    if(err){
+      sendResult(res, 400, {code:400, message: err, data: results})
+    } else {
+      sendResult(res, 200, results);
+    }
+  })
 });
 
 router.post('/function', passport.authenticate('bearer', { session: false }), function (req, res, next) {
-  api(req.user).ApiFunction(req.body, function(err, results){
+  cli.Function(req.authInfo.token, req.body, function(err, results){
     if(err){
       sendResult(res, 400, {code:400, message: err})
     } else {
@@ -155,7 +153,7 @@ router.post('/function', passport.authenticate('bearer', { session: false }), fu
 });
 
 router.post('/view', passport.authenticate('bearer', { session: false }), function (req, res, next) {
-  api(req.user).ApiView(req.body, function(err, results){
+  cli.View(req.authInfo.token, req.body, function(err, results){
     if(err){
       sendResult(res, 400, {code:400, message: err})
     } else {
@@ -166,16 +164,16 @@ router.post('/view', passport.authenticate('bearer', { session: false }), functi
 
 router.get('/*', passport.authenticate('bearer', { session: false }), function (req, res, next) {
   var datatype = req.path.split("/")[1]
-  if(datatype && ntura.model.hasOwnProperty(datatype)) {
+  if(datatype) {
     var params = req.query
-    if (ntura.model.hasOwnProperty(datatype)){
+    if (Models.includes(datatype)){
       params.nervatype = datatype
       params.ids = req.params[0].split("/")[1]
-      api(req.user).ApiGet(params, function(err, data){
+      cli.Get(req.authInfo.token, params, function(err, data){
         if(err){
           sendResult(res, 400, {code:400, message: err})
         } else {
-          sendResult(res, 200, data)
+          sendResult(res, 200, data);
         }
       })
     } else {
@@ -199,8 +197,8 @@ router.get('/*', passport.authenticate('bearer', { session: false }), function (
 
 router.post('/*', passport.authenticate('bearer', { session: false }), function (req, res, next) {
   var datatype = req.path.split("/")[1]
-  if (datatype && ntura.model.hasOwnProperty(datatype)){
-    api(req.user).ApiPost({nervatype: datatype, data: req.body}, 
+  if (datatype && Models.includes(datatype)){
+    cli.Update(req.authInfo.token, {nervatype: datatype, data: req.body}, 
       function(err, results){
         if(err){
           sendResult(res, 400, {code:400, message: err})
@@ -215,10 +213,10 @@ router.post('/*', passport.authenticate('bearer', { session: false }), function 
 
 router.delete('/*', passport.authenticate('bearer', { session: false }), function (req, res, next) {
   var datatype = req.path.split("/")[1]
-  if (datatype && ntura.model.hasOwnProperty(datatype)){
+  if (datatype && Models.includes(datatype)){
     var params = req.query
     params.nervatype = datatype
-    api(req.user).ApiDelete(params, function(err, id){
+    cli.Delete(req.authInfo.token, params, function(err, id){
       if(err){
         sendResult(res, 400, {code:400, message: err})
       } else {
@@ -233,6 +231,9 @@ router.delete('/*', passport.authenticate('bearer', { session: false }), functio
 function sendResult(res, code, data){
   res.set('Content-Type', 'application/json');
   if(data){
+    if(typeof data === "string"){
+      res.set('Content-Type', 'text/plain');
+    }
     res.status(code).send(data)
   } else {
     res.sendStatus(code)

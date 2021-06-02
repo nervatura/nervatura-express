@@ -51,3 +51,7 @@ data/storage/*
 *.pem
 .elasticbeanstalk/
 vcap-local.json
+node_modules
+demo.db
+.devcontainer
+Makefile
