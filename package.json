@@ -1,6 +1,6 @@
 {
   "name": "nervatura-express",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Nervatura Node Demo App",
   "keywords": [
     "business management",
@@ -48,12 +48,12 @@
     "express": "^4.17.1",
     "express-content-length-validator": "^1.0.0",
     "express-enforces-ssl": "^1.1.0",
-    "google-protobuf": "^3.17.2",
+    "google-protobuf": "^3.17.3",
     "helmet": "^4.6.0",
     "hpp": "^0.2.3",
     "method-override": "^3.0.0",
     "morgan": "^1.10.0",
-    "nervatura": "^5.0.0-beta.1",
+    "nervatura": "^5.0.0-beta.2",
     "passport": "^0.4.1",
     "passport-http-bearer": "^1.0.1"
   }
