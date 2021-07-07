@@ -46,7 +46,7 @@ node_modules
 jsonconfig.json
 
 public/application
-data/data/*
+
 data/storage/*
 *.pem
 .elasticbeanstalk/
